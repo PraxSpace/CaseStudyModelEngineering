@@ -12,8 +12,7 @@ psp_fees = {
     'Goldcard': {'success_fee': 10.00, 'fail_fee': 5.00},
     'UK_Card': {'success_fee': 3.00, 'fail_fee': 1.00},
     'Simplecard': {'success_fee': 1.00, 'fail_fee': 0.50},}
-# 1. Data Preperation and cleanup of the CSV file provided
-def load_and_clean_dataset(file):
+def load_and_clean_dataset(file):   # 1. Data Preperation and cleanup of the CSV file provided
     try:
         fileData = pd.read_excel(file)
         fileData['tmsp'] = pd.to_datetime(fileData['tmsp'])
@@ -26,8 +25,7 @@ def load_and_clean_dataset(file):
     except Exception as e:
         print(f"\nError loading dataset: {str(e)}")
         sys.exit(1)
-# 2. Feature Engineering data preparation as per the requirement
-def engineer_features_data_prep(fileData):
+def engineer_features_data_prep(fileData):  # 2. Feature Engineering data preparation as per the requirement
     try:
         fileData['hour'] = fileData['tmsp'].dt.hour
         fileData['day'] = fileData['tmsp'].dt.day
@@ -42,8 +40,7 @@ def engineer_features_data_prep(fileData):
     except Exception as e:
         print(f"\nFeature engineering error: {str(e)}")
         sys.exit(1)
-# 3. Basic Exploratory Data Analysis
-def run_Exploratory_Data_Analysis(data):
+def run_Exploratory_Data_Analysis(data):    # 3. Basic Exploratory Data Analysis
     try:
         print("\nSuccess rate per PSP:")
         print(data.groupby("PSP")['success'].mean())
@@ -56,8 +53,7 @@ def run_Exploratory_Data_Analysis(data):
     except Exception as e:
         print(f"\nError during EDA: {str(e)}")
         sys.exit(1)
-# 4. Prepare Data for Model to train. 80/20 split applied here
-def prepare_model_data(df):
+def prepare_model_data(df): # 4. Prepare Data for Model to train. 80/20 split applied here
     try:
         df_model = pd.get_dummies(df, columns=['PSP', 'country', 'card'], drop_first=True)
         features = ['amount', '3D_secured', 'hour', 'weekday', 'is_retry'] + \
@@ -69,8 +65,7 @@ def prepare_model_data(df):
     except Exception as e:
         print(f"\nError during model preparation: {str(e)}")
         sys.exit(1)
-# 5. The prepared model trained to extract classifier report
-def train_predictive_model(X_train, y_train, X_test, y_test):
+def train_predictive_model(X_train, y_train, X_test, y_test):   # 5. The prepared model trained to extract classifier report
     try:
         model = RandomForestClassifier(n_estimators=100, random_state=42)
         model.fit(X_train, y_train)
@@ -81,8 +76,7 @@ def train_predictive_model(X_train, y_train, X_test, y_test):
     except Exception as e:
         print(f"\nError during model training: {str(e)}")
         sys.exit(1)
-# 6. PSP Routing Simulation
-def train_routing_models(df, features):
+def train_routing_models(df, features): # 6. PSP Routing Simulation
     try:
         psp_models = {}
         psps = df['PSP'].unique()
